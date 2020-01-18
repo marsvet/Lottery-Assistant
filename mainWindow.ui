@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1160</width>
+    <height>669</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>-1</x>
+      <y>-1</y>
+      <width>1161</width>
+      <height>671</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QFrame" name="leftFrame">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>3</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QListWidget" name="menuList">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>40</y>
+          <width>281</width>
+          <height>581</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <item>
+         <property name="text">
+          <string>数据总览</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>号码出现次数</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>次数统计</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>奇偶</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>大小</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>阴阳</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>质合</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>和值</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>012路</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>跨度</string>
+         </property>
+        </item>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QFrame" name="rightFrame">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>7</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QStackedWidget" name="stackedWidget">
+        <property name="geometry">
+         <rect>
+          <x>19</x>
+          <y>-21</y>
+          <width>771</width>
+          <height>671</height>
+         </rect>
+        </property>
+        <property name="currentIndex">
+         <number>3</number>
+        </property>
+        <widget class="QWidget" name="allDataPage">
+         <widget class="QTableWidget" name="allDataTable">
+          <property name="geometry">
+           <rect>
+            <x>5</x>
+            <y>61</y>
+            <width>751</width>
+            <height>521</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QWidget" name="horizontalLayoutWidget_2">
+          <property name="geometry">
+           <rect>
+            <x>220</x>
+            <y>610</y>
+            <width>351</width>
+            <height>34</height>
+           </rect>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QPushButton" name="updateData">
+             <property name="text">
+              <string>更新数据</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="exportAllData">
+             <property name="text">
+              <string>导出为 excel</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="perNumberCountPage">
+         <widget class="QTableWidget" name="perNumberCountTable">
+          <property name="geometry">
+           <rect>
+            <x>5</x>
+            <y>61</y>
+            <width>751</width>
+            <height>531</height>
+           </rect>
+          </property>
+          <property name="sortingEnabled">
+           <bool>true</bool>
+          </property>
+          <attribute name="horizontalHeaderDefaultSectionSize">
+           <number>350</number>
+          </attribute>
+         </widget>
+         <widget class="QPushButton" name="exportPerNumberCount">
+          <property name="geometry">
+           <rect>
+            <x>310</x>
+            <y>610</y>
+            <width>141</width>
+            <height>32</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>导出为 excel</string>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="countStatisticsPage"/>
+        <widget class="QWidget" name="oddEvenPage">
+         <widget class="QTabWidget" name="tabWidget">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>40</y>
+            <width>771</width>
+            <height>601</height>
+           </rect>
+          </property>
+          <property name="currentIndex">
+           <number>2</number>
+          </property>
+          <widget class="QWidget" name="oddEvenTableTab">
+           <attribute name="title">
+            <string>表格</string>
+           </attribute>
+           <widget class="QTableWidget" name="oddEvenTable">
+            <property name="geometry">
+             <rect>
+              <x>-1</x>
+              <y>-1</y>
+              <width>771</width>
+              <height>500</height>
+             </rect>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+           <widget class="QPushButton" name="exportOddEven">
+            <property name="geometry">
+             <rect>
+              <x>310</x>
+              <y>520</y>
+              <width>161</width>
+              <height>32</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>导出为 excel</string>
+            </property>
+           </widget>
+          </widget>
+          <widget class="QWidget" name="oddEvenBarChartTab">
+           <attribute name="title">
+            <string>柱形图</string>
+           </attribute>
+           <widget class="QWidget" name="horizontalLayoutWidget_3">
+            <property name="geometry">
+             <rect>
+              <x>280</x>
+              <y>480</y>
+              <width>221</width>
+              <height>51</height>
+             </rect>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
+             <item>
+              <widget class="QLabel" name="label_2">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>最近</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="oddEvenBarChartLimit">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>45</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>期</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QPushButton" name="repaintOddEvenBarChartButton">
+               <property name="text">
+                <string>重绘</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+          <widget class="QWidget" name="oddEvenPieChartTab">
+           <attribute name="title">
+            <string>扇形图</string>
+           </attribute>
+           <widget class="QWidget" name="horizontalLayoutWidget_4">
+            <property name="geometry">
+             <rect>
+              <x>270</x>
+              <y>480</y>
+              <width>221</width>
+              <height>51</height>
+             </rect>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_6">
+             <item>
+              <widget class="QLabel" name="label_7">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>最近</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="oddEvenPieChartLimit">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>45</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_8">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>期</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_4">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QPushButton" name="repaintOddEvenPieChartButton">
+               <property name="text">
+                <string>重绘</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="bigSmallPage"/>
+        <widget class="QWidget" name="yinYangPage"/>
+        <widget class="QWidget" name="primeCompositePage"/>
+        <widget class="QWidget" name="calcSumPage"/>
+        <widget class="QWidget" name="calc012Page"/>
+        <widget class="QWidget" name="calcSpanPage"/>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>menuList</sender>
+   <signal>currentRowChanged(int)</signal>
+   <receiver>stackedWidget</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>201</x>
+     <y>196</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>443</x>
+     <y>203</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
