@@ -29,9 +29,13 @@ class Database:
         cursor.close()
         return columns, perNumberCount
 
-    def getWinningNumbers(self, limit):  # 获取最近 limit 期的中奖号码
+    def getWinningNumbers(self, limit):  # 获取最近 limit 期的中奖号码。若 limit 为负数，表示获取全部
         cursor = self.db.cursor()
-        cursor.execute("select 中奖号码 from 中奖号码 limit %d" % limit)
+        if limit < 0:
+            sql = "select 中奖号码 from 中奖号码"
+        else:
+            sql = "select 中奖号码 from 中奖号码 limit %d" % limit
+        cursor.execute(sql)
         winningNumbers = cursor.fetchall()
         winningNumbers = [item[0] for item in winningNumbers]
         cursor.close()

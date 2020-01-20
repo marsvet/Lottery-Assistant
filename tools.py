@@ -20,15 +20,3 @@ def isPrimeNumber(num): # 判断 num 是否为质数。这里把 0 看做合数�
         if num % i == 0:
             return False
     return True
-
-def isYangNumber(num):  # 判断 num 是否为阳数
-    if not isinstance(num, int):
-        return None
-    yangNumber = [1, 2, 5, 8, 9]
-    yinNumber = [0, 3, 4, 6, 7]
-    if num in yangNumber:
-        return True
-    elif num in yinNumber:
-        return False
-    else:
-        return None
