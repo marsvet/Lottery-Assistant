@@ -271,6 +271,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
         counter = {str(i):countCol.count(i) for i in range(0, max(countCol) + 1)}
 
         pieChart = charts.Pie()
+        pieChart.set_global_opts(legend_opts=options.LegendOpts(type_="scroll"))
         pieChart.add(series_name="", data_pair=list(
             zip(counter.keys(), counter.values())), rosetype="radius")
         pieChart.render("charts/countStatisticsPieChart.html")
@@ -363,6 +364,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             counter[key] += 1
 
         pieChart = charts.Pie()
+        pieChart.set_global_opts(legend_opts=options.LegendOpts(type_="scroll"))
         pieChart.add(series_name="", data_pair=list(
             zip(counter.keys(), counter.values())), rosetype="radius")
         pieChart.render("charts/oddEvenPieChart.html")
@@ -453,6 +455,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             counter[key] += 1
 
         pieChart = charts.Pie()
+        pieChart.set_global_opts(legend_opts=options.LegendOpts(type_="scroll"))
         pieChart.add(series_name="", data_pair=list(
             zip(counter.keys(), counter.values())), rosetype="radius")
         pieChart.render("charts/bigSmallPieChart.html")
@@ -543,6 +546,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             counter[key] += 1
 
         pieChart = charts.Pie()
+        pieChart.set_global_opts(legend_opts=options.LegendOpts(type_="scroll"))
         pieChart.add(series_name="", data_pair=list(
             zip(counter.keys(), counter.values())), rosetype="radius")
         pieChart.render("charts/yinYangPieChart.html")
@@ -636,6 +640,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             counter[key] += 1
 
         pieChart = charts.Pie()
+        pieChart.set_global_opts(legend_opts=options.LegendOpts(type_="scroll"))
         pieChart.add(series_name="", data_pair=list(
             zip(counter.keys(), counter.values())), rosetype="radius")
         pieChart.render("charts/primeCompositePieChart.html")
@@ -712,6 +717,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             counter[str(numSum)] += 1
 
         pieChart = charts.Pie()
+        pieChart.set_global_opts(legend_opts=options.LegendOpts(type_="scroll"))
         pieChart.add(series_name="", data_pair=list(
             zip(counter.keys(), counter.values())), rosetype="radius")
         pieChart.render("charts/calcSumPieChart.html")
@@ -806,6 +812,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             counter[key] += 1
 
         pieChart = charts.Pie()
+        pieChart.set_global_opts(legend_opts=options.LegendOpts(type_="scroll"))
         pieChart.add(series_name="", data_pair=list(
             zip(counter.keys(), counter.values())), rosetype="radius")
         pieChart.render("charts/calc012PieChart.html")
@@ -884,6 +891,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             counter[str(span)] += 1
 
         pieChart = charts.Pie()
+        pieChart.set_global_opts(legend_opts=options.LegendOpts(type_="scroll"))
         pieChart.add(series_name="", data_pair=list(
             zip(counter.keys(), counter.values())), rosetype="radius")
         pieChart.render("charts/calcSpanPieChart.html")
