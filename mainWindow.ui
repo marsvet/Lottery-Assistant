@@ -161,13 +161,6 @@
               <number>30</number>
              </property>
              <item>
-              <widget class="QPushButton" name="updateData">
-               <property name="text">
-                <string>更新数据</string>
-               </property>
-              </widget>
-             </item>
-             <item>
               <widget class="QPushButton" name="exportAllData">
                <property name="text">
                 <string>导出为 excel</string>
@@ -598,6 +591,21 @@
            </sizepolicy>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_9">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
            <item>
             <widget class="QTabWidget" name="tabWidget_9">
              <property name="currentIndex">

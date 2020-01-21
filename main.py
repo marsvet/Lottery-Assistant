@@ -19,11 +19,11 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
         super(MyMainWindow, self).__init__(arg)
         self.setupUi(self)
         self.db = Database()
+        self.updateLotteryData()    # 更新数据
         phaseNoLimit = 100
 
         # “数据总览”页
         self.displayLotteryData()
-        self.updateData.clicked.connect(self.updateLotteryData)
         self.exportAllData.clicked.connect(self.exportLotteryData)
 
         # “号码出现次数”页
@@ -129,6 +129,22 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
         self.renderCalcSpanBarChart(phaseNoLimit)
         self.renderCalcSpanPieChart(phaseNoLimit)
 
+    def updateLotteryData(self):
+        latestDateStr = self.db.getLatestDate()
+        startDate = datetime.strptime(
+            latestDateStr, "%Y-%m-%d") + timedelta(days=1)
+        startDateStr = startDate.strftime("%Y-%m-%d")
+        now = datetime.now()
+        if now.hour >= 22 or (now.hour == 21 and now.minute >= 30):  # 福彩3D 在每日 21:15 开奖，保险起见，使用 21:30 判断是否已开奖
+            endDate = now
+        else:
+            endDate = now - timedelta(days=1)
+        endDateStr = endDate.strftime("%Y-%m-%d")
+        cwl = Crawler()
+        newData = cwl.getLotteryData(startDateStr, endDateStr)
+        for item in newData:
+            self.db.insertItem(item)
+
     def displayLotteryData(self):
         columns, allData = self.db.getWinningData()
         allData.reverse()
@@ -151,26 +167,6 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
                     item.setText("")
                 item.setTextAlignment(Qt.AlignCenter)
                 self.allDataTable.setItem(rowIndex, colIndex, item)
-
-    def updateLotteryData(self):
-        self.updateData.setEnabled(False)
-
-        latestDateStr = self.db.getLatestDate()
-        startDate = datetime.strptime(
-            latestDateStr, "%Y-%m-%d") + timedelta(days=1)
-        startDateStr = startDate.strftime("%Y-%m-%d")
-        now = datetime.now()
-        if now.hour >= 21 and now.minute >= 30:  # 福彩3D 在每日 21:15 开奖，保险起见，使用 21:30 判断是否已开奖
-            endDate = now
-        else:
-            endDate = now - timedelta(days=1)
-        endDateStr = endDate.strftime("%Y-%m-%d")
-        cwl = Crawler()
-        newData = cwl.getLotteryData(startDateStr, endDateStr)
-        for item in newData:
-            self.db.insertItem(item)
-
-        self.displayLotteryData()
 
     def exportLotteryData(self):
         self.exportAllData.setEnabled(False)
