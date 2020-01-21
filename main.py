@@ -251,8 +251,6 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
         counter = {str(i):countCol.count(i) for i in range(0, max(countCol) + 1)}
 
         barChart = charts.Bar()
-        barChart.width = '750px'
-        barChart.height = '470px'
         barChart.add_xaxis(list(counter.keys()))
         barChart.add_yaxis("个数", list(counter.values()))
         barChart.set_global_opts(
@@ -265,7 +263,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
         if not hasattr(self, "countStatisticsBarChart"):
             self.countStatisticsBarChart = QWebEngineView(
                 self.countStatisticsBarChartTab)
-            self.countStatisticsBarChart.setGeometry(QRect(-1, -1, 771, 490))
+            self.countStatisticsBarChartTabLayout.addWidget(self.countStatisticsBarChart)
             self.countStatisticsBarChart.setObjectName(
                 "countStatisticsBarChart")
         self.countStatisticsBarChart.load(
@@ -277,8 +275,6 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
         counter = {str(i):countCol.count(i) for i in range(0, max(countCol) + 1)}
 
         pieChart = charts.Pie()
-        pieChart.width = '750px'
-        pieChart.height = '470px'
         pieChart.add(series_name="", data_pair=list(
             zip(counter.keys(), counter.values())), rosetype="radius")
         pieChart.render("charts/countStatisticsPieChart.html")
@@ -286,7 +282,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
         if not hasattr(self, "countStatisticsPieChart"):
             self.countStatisticsPieChart = QWebEngineView(
                 self.countStatisticsPieChartTab)
-            self.countStatisticsPieChart.setGeometry(QRect(-1, -1, 771, 490))
+            self.countStatisticsPieChartTabLayout.addWidget(self.countStatisticsPieChart)
             self.countStatisticsPieChart.setObjectName(
                 "countStatisticsPieChart")
         self.countStatisticsPieChart.load(
@@ -342,8 +338,6 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             counter[key] += 1
 
         barChart = charts.Bar()
-        barChart.width = '750px'
-        barChart.height = '470px'
         barChart.add_xaxis(list(counter.keys()))
         barChart.add_yaxis("奇偶", list(counter.values()))
         barChart.set_global_opts(
@@ -354,7 +348,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
 
         if not hasattr(self, "oddEvenBarChart"):    # 如果 oddEvenBarChart 不存在（即第一次渲染）
             self.oddEvenBarChart = QWebEngineView(self.oddEvenBarChartTab)
-            self.oddEvenBarChart.setGeometry(QRect(-1, -1, 771, 490))
+            self.oddEvenBarChartTabLayout.addWidget(self.oddEvenBarChart)
             self.oddEvenBarChart.setObjectName("oddEvenBarChart")
         self.oddEvenBarChart.load(
             QUrl("file:///" + QFileInfo("charts/oddEvenBarChart.html").absoluteFilePath()))
@@ -373,15 +367,13 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             counter[key] += 1
 
         pieChart = charts.Pie()
-        pieChart.width = '750px'
-        pieChart.height = '470px'
         pieChart.add(series_name="", data_pair=list(
             zip(counter.keys(), counter.values())), rosetype="radius")
         pieChart.render("charts/oddEvenPieChart.html")
 
         if not hasattr(self, "oddEvenPieChart"):
             self.oddEvenPieChart = QWebEngineView(self.oddEvenPieChartTab)
-            self.oddEvenPieChart.setGeometry(QRect(-1, -1, 771, 490))
+            self.oddEvenPieChartTabLayout.addWidget(self.oddEvenPieChart)
             self.oddEvenPieChart.setObjectName("oddEvenPieChart")
         self.oddEvenPieChart.load(
             QUrl("file:///" + QFileInfo("charts/oddEvenPieChart.html").absoluteFilePath()))
@@ -436,8 +428,6 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             counter[key] += 1
 
         barChart = charts.Bar()
-        barChart.width = '750px'
-        barChart.height = '470px'
         barChart.add_xaxis(list(counter.keys()))
         barChart.add_yaxis("大小", list(counter.values()))
         barChart.set_global_opts(
@@ -448,7 +438,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
 
         if not hasattr(self, "bigSmallBarChart"):    # 如果 bigSmallBarChart 不存在（即第一次渲染）
             self.bigSmallBarChart = QWebEngineView(self.bigSmallBarChartTab)
-            self.bigSmallBarChart.setGeometry(QRect(-1, -1, 771, 490))
+            self.bigSmallBarChartTabLayout.addWidget(self.bigSmallBarChart)
             self.bigSmallBarChart.setObjectName("bigSmallBarChart")
         self.bigSmallBarChart.load(
             QUrl("file:///" + QFileInfo("charts/bigSmallBarChart.html").absoluteFilePath()))
@@ -467,15 +457,13 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             counter[key] += 1
 
         pieChart = charts.Pie()
-        pieChart.width = '750px'
-        pieChart.height = '470px'
         pieChart.add(series_name="", data_pair=list(
             zip(counter.keys(), counter.values())), rosetype="radius")
         pieChart.render("charts/bigSmallPieChart.html")
 
         if not hasattr(self, "bigSmallPieChart"):
             self.bigSmallPieChart = QWebEngineView(self.bigSmallPieChartTab)
-            self.bigSmallPieChart.setGeometry(QRect(-1, -1, 771, 490))
+            self.bigSmallPieChartTabLayout.addWidget(self.bigSmallPieChart)
             self.bigSmallPieChart.setObjectName("bigSmallPieChart")
         self.bigSmallPieChart.load(
             QUrl("file:///" + QFileInfo("charts/bigSmallPieChart.html").absoluteFilePath()))
@@ -530,8 +518,6 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             counter[key] += 1
 
         barChart = charts.Bar()
-        barChart.width = '750px'
-        barChart.height = '470px'
         barChart.add_xaxis(list(counter.keys()))
         barChart.add_yaxis("阴阳", list(counter.values()))
         barChart.set_global_opts(
@@ -542,7 +528,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
 
         if not hasattr(self, "yinYangBarChart"):    # 如果 yinYangBarChart 不存在（即第一次渲染）
             self.yinYangBarChart = QWebEngineView(self.yinYangBarChartTab)
-            self.yinYangBarChart.setGeometry(QRect(-1, -1, 771, 490))
+            self.yinYangBarChartTabLayout.addWidget(self.yinYangBarChart)
             self.yinYangBarChart.setObjectName("yinYangBarChart")
         self.yinYangBarChart.load(
             QUrl("file:///" + QFileInfo("charts/yinYangBarChart.html").absoluteFilePath()))
@@ -561,15 +547,13 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             counter[key] += 1
 
         pieChart = charts.Pie()
-        pieChart.width = '750px'
-        pieChart.height = '470px'
         pieChart.add(series_name="", data_pair=list(
             zip(counter.keys(), counter.values())), rosetype="radius")
         pieChart.render("charts/yinYangPieChart.html")
 
         if not hasattr(self, "yinYangPieChart"):
             self.yinYangPieChart = QWebEngineView(self.yinYangPieChartTab)
-            self.yinYangPieChart.setGeometry(QRect(-1, -1, 771, 490))
+            self.yinYangPieChartTabLayout.addWidget(self.yinYangPieChart)
             self.yinYangPieChart.setObjectName("yinYangPieChart")
         self.yinYangPieChart.load(
             QUrl("file:///" + QFileInfo("charts/yinYangPieChart.html").absoluteFilePath()))
@@ -625,8 +609,6 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             counter[key] += 1
 
         barChart = charts.Bar()
-        barChart.width = '750px'
-        barChart.height = '470px'
         barChart.add_xaxis(list(counter.keys()))
         barChart.add_yaxis("质合", list(counter.values()))
         barChart.set_global_opts(
@@ -639,7 +621,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
         if not hasattr(self, "primeCompositeBarChart"):
             self.primeCompositeBarChart = QWebEngineView(
                 self.primeCompositeBarChartTab)
-            self.primeCompositeBarChart.setGeometry(QRect(-1, -1, 771, 490))
+            self.primeCompositeBarChartTabLayout.addWidget(self.primeCompositeBarChart)
             self.primeCompositeBarChart.setObjectName("primeCompositeBarChart")
         self.primeCompositeBarChart.load(
             QUrl("file:///" + QFileInfo("charts/primeCompositeBarChart.html").absoluteFilePath()))
@@ -658,8 +640,6 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             counter[key] += 1
 
         pieChart = charts.Pie()
-        pieChart.width = '750px'
-        pieChart.height = '470px'
         pieChart.add(series_name="", data_pair=list(
             zip(counter.keys(), counter.values())), rosetype="radius")
         pieChart.render("charts/primeCompositePieChart.html")
@@ -667,7 +647,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
         if not hasattr(self, "primeCompositePieChart"):
             self.primeCompositePieChart = QWebEngineView(
                 self.primeCompositePieChartTab)
-            self.primeCompositePieChart.setGeometry(QRect(-1, -1, 771, 490))
+            self.primeCompositePieChartTabLayout.addWidget(self.primeCompositePieChart)
             self.primeCompositePieChart.setObjectName("primeCompositePieChart")
         self.primeCompositePieChart.load(
             QUrl("file:///" + QFileInfo("charts/primeCompositePieChart.html").absoluteFilePath()))
@@ -713,8 +693,6 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             counter[str(numSum)] += 1
 
         barChart = charts.Bar()
-        barChart.width = '750px'
-        barChart.height = '470px'
         barChart.add_xaxis(list(counter.keys()))
         barChart.add_yaxis("和值", list(counter.values()))
         barChart.set_global_opts(
@@ -725,7 +703,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
 
         if not hasattr(self, "calcSumBarChart"):    # 如果 calcSumBarChart 不存在（即第一次渲染）
             self.calcSumBarChart = QWebEngineView(self.calcSumBarChartTab)
-            self.calcSumBarChart.setGeometry(QRect(-1, -1, 771, 490))
+            self.calcSumBarChartTabLayout.addWidget(self.calcSumBarChart)
             self.calcSumBarChart.setObjectName("calcSumBarChart")
         self.calcSumBarChart.load(
             QUrl("file:///" + QFileInfo("charts/calcSumBarChart.html").absoluteFilePath()))
@@ -738,15 +716,13 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             counter[str(numSum)] += 1
 
         pieChart = charts.Pie()
-        pieChart.width = '750px'
-        pieChart.height = '470px'
         pieChart.add(series_name="", data_pair=list(
             zip(counter.keys(), counter.values())), rosetype="radius")
         pieChart.render("charts/calcSumPieChart.html")
 
         if not hasattr(self, "calcSumPieChart"):
             self.calcSumPieChart = QWebEngineView(self.calcSumPieChartTab)
-            self.calcSumPieChart.setGeometry(QRect(-1, -1, 771, 490))
+            self.calcSumPieChartTabLayout.addWidget(self.calcSumPieChart)
             self.calcSumPieChart.setObjectName("calcSumPieChart")
         self.calcSumPieChart.load(
             QUrl("file:///" + QFileInfo("charts/calcSumPieChart.html").absoluteFilePath()))
@@ -805,8 +781,6 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             counter[key] += 1
 
         barChart = charts.Bar()
-        barChart.width = '750px'
-        barChart.height = '470px'
         barChart.add_xaxis(list(counter.keys()))
         barChart.add_yaxis("012路", list(counter.values()))
         barChart.set_global_opts(
@@ -817,7 +791,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
 
         if not hasattr(self, "calc012BarChart"):    # 如果 calc012BarChart 不存在（即第一次渲染）
             self.calc012BarChart = QWebEngineView(self.calc012BarChartTab)
-            self.calc012BarChart.setGeometry(QRect(-1, -1, 771, 490))
+            self.calc012BarChartTabLayout.addWidget(self.calc012BarChart)
             self.calc012BarChart.setObjectName("calc012BarChart")
         self.calc012BarChart.load(
             QUrl("file:///" + QFileInfo("charts/calc012BarChart.html").absoluteFilePath()))
@@ -836,15 +810,13 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             counter[key] += 1
 
         pieChart = charts.Pie()
-        pieChart.width = '750px'
-        pieChart.height = '470px'
         pieChart.add(series_name="", data_pair=list(
             zip(counter.keys(), counter.values())), rosetype="radius")
         pieChart.render("charts/calc012PieChart.html")
 
         if not hasattr(self, "calc012PieChart"):
             self.calc012PieChart = QWebEngineView(self.calc012PieChartTab)
-            self.calc012PieChart.setGeometry(QRect(-1, -1, 771, 490))
+            self.calc012PieChartTabLayout.addWidget(self.calc012PieChart)
             self.calc012PieChart.setObjectName("calc012PieChart")
         self.calc012PieChart.load(
             QUrl("file:///" + QFileInfo("charts/calc012PieChart.html").absoluteFilePath()))
@@ -892,8 +864,6 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             counter[str(span)] += 1
 
         barChart = charts.Bar()
-        barChart.width = '750px'
-        barChart.height = '470px'
         barChart.add_xaxis(list(counter.keys()))
         barChart.add_yaxis("跨度", list(counter.values()))
         barChart.set_global_opts(
@@ -904,7 +874,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
 
         if not hasattr(self, "calcSpanBarChart"):    # 如果 calcSpanBarChart 不存在（即第一次渲染）
             self.calcSpanBarChart = QWebEngineView(self.calcSpanBarChartTab)
-            self.calcSpanBarChart.setGeometry(QRect(-1, -1, 771, 490))
+            self.calcSpanBarChartTabLayout.addWidget(self.calcSpanBarChart)
             self.calcSpanBarChart.setObjectName("calcSpanBarChart")
         self.calcSpanBarChart.load(
             QUrl("file:///" + QFileInfo("charts/calcSpanBarChart.html").absoluteFilePath()))
@@ -918,15 +888,13 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             counter[str(span)] += 1
 
         pieChart = charts.Pie()
-        pieChart.width = '750px'
-        pieChart.height = '470px'
         pieChart.add(series_name="", data_pair=list(
             zip(counter.keys(), counter.values())), rosetype="radius")
         pieChart.render("charts/calcSpanPieChart.html")
 
         if not hasattr(self, "calcSpanPieChart"):
             self.calcSpanPieChart = QWebEngineView(self.calcSpanPieChartTab)
-            self.calcSpanPieChart.setGeometry(QRect(-1, -1, 771, 490))
+            self.calcSpanPieChartTabLayout.addWidget(self.calcSpanPieChart)
             self.calcSpanPieChart.setObjectName("calcSpanPieChart")
         self.calcSpanPieChart.load(
             QUrl("file:///" + QFileInfo("charts/calcSpanPieChart.html").absoluteFilePath()))
