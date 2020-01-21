@@ -21,15 +21,7 @@ class Database:
         cursor.close()
         return columns, winningData
 
-    def getPerNumberCount(self):
-        cursor = self.db.cursor()
-        cursor.execute("select * from 次数统计")
-        perNumberCount = cursor.fetchall()
-        columns = [item[0] for item in cursor.description]
-        cursor.close()
-        return columns, perNumberCount
-
-    def getWinningNumbers(self, limit):  # 获取最近 limit 期的中奖号码。若 limit 为负数，表示获取全部
+    def getWinningNumbers(self, limit=-1):  # 获取最近 limit 期的中奖号码。若 limit 为负数，表示获取全部
         cursor = self.db.cursor()
         if limit < 0:
             sql = "select 中奖号码 from 中奖号码"
@@ -40,6 +32,19 @@ class Database:
         winningNumbers = [item[0] for item in winningNumbers]
         cursor.close()
         return winningNumbers
+
+    def getPerNumberCount(self, limit=-1):  # 获取最近 limit 期中，每个号码出现的次数
+        winningNumbers = self.getWinningNumbers(limit)
+        counter = {}
+        for i in range(10):
+            for j in range(10):
+                for k in range(10):
+                    counter[str(i) + str(j) + str(k)] = 0
+        for num in winningNumbers:
+            counter[num] += 1
+        columns = ["中奖号码", "次数"]
+        perNumberCount = list(zip(counter.keys(), counter.values()))
+        return columns, perNumberCount
 
     def getLatestDate(self):    # 获取数据库中最新数据的日期
         cursor = self.db.cursor()

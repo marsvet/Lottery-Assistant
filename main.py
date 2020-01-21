@@ -31,6 +31,19 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
         self.exportPerNumberCount.clicked.connect(
             self.exportPerNumberCountData)
 
+        # “次数统计”页
+        self.displayCountStatisticsTable()
+        self.exportCountStatistics.clicked.connect(
+            self.exportCountStatisticsData)
+        self.countStatisticsBarChartLimit.setText(str(6000))
+        self.countStatisticsPieChartLimit.setText(str(6000))
+        self.repaintCountStatisticsBarChartButton.clicked.connect(
+            self.repaintCountStatisticsBarChart)
+        self.repaintCountStatisticsPieChartButton.clicked.connect(
+            self.repaintCountStatisticsPieChart)
+        self.renderCountStatisticsBarChart(6000)
+        self.renderCountStatisticsPieChart(6000)
+
         # “奇偶”页
         self.displayOddEvenTable()
         self.exportOddEven.clicked.connect(self.exportOddEvenData)
@@ -195,9 +208,93 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
         tools.export2Excel(matrix, "xlsx/perNumberCount.xlsx")
         self.exportPerNumberCount.setText("导出成功")
 
+    def displayCountStatisticsTable(self):
+        perNumberCount = self.db.getPerNumberCount()[1]
+        countStatisticsDict = {str(row[0]): row[1]
+                               for row in perNumberCount}  # 转换为字典的形式，方便查阅
+        tableHeaders = [str(i) for i in list(
+            range(0, max(countStatisticsDict.values()) + 1))]
+        winningNumbers = self.db.getWinningNumbers()
+        rowCount = len(winningNumbers)
+        colCount = len(tableHeaders)
+        self.countStatisticsTable.setRowCount(rowCount)
+        self.countStatisticsTable.setColumnCount(colCount)
+        self.countStatisticsTable.setHorizontalHeaderLabels(tableHeaders)
+        self.countStatisticsTable.setEditTriggers(
+            QAbstractItemView.NoEditTriggers)
+        self.countStatisticsTable.horizontalHeader().setSectionResizeMode(
+            QHeaderView.Stretch)  # 设置单元格自适应列宽并等宽
+        for rowIndex in range(rowCount):
+            number = winningNumbers[rowIndex]
+            item = QTableWidgetItem(number)
+            item.setTextAlignment(Qt.AlignCenter)
+            item.setBackground(QColor(255, 255, 0))
+            self.countStatisticsTable.setItem(rowIndex, countStatisticsDict[number], item)
+
+    def exportCountStatisticsData(self):
+        self.exportCountStatistics.setEnabled(False)
+        matrix = self.tableData2Matrix(self.countStatisticsTable, [])
+        tools.export2Excel(matrix, "xlsx/countStatistics.xlsx")
+        self.exportCountStatistics.setText("导出成功")
+
+    def repaintCountStatisticsBarChart(self):
+        limit = int(self.countStatisticsBarChartLimit.text())
+        self.renderCountStatisticsBarChart(limit)
+
+    def repaintCountStatisticsPieChart(self):
+        limit = int(self.countStatisticsPieChartLimit.text())
+        self.renderCountStatisticsPieChart(limit)
+
+    def renderCountStatisticsBarChart(self, limit):
+        perNumberCount = self.db.getPerNumberCount(limit)[1]
+        countCol = [row[1] for row in perNumberCount]   # 取出第二列，也就是“次数”列
+        counter = {str(i):countCol.count(i) for i in range(0, max(countCol) + 1)}
+
+        barChart = charts.Bar()
+        barChart.width = '750px'
+        barChart.height = '470px'
+        barChart.add_xaxis(list(counter.keys()))
+        barChart.add_yaxis("个数", list(counter.values()))
+        barChart.set_global_opts(
+            xaxis_opts=options.AxisOpts(name="次数"),
+            yaxis_opts=options.AxisOpts(name="个数")
+        )
+        barChart.render("charts/countStatisticsBarChart.html")
+
+        # 如果 countStatisticsBarChart 不存在（即第一次渲染）
+        if not hasattr(self, "countStatisticsBarChart"):
+            self.countStatisticsBarChart = QWebEngineView(
+                self.countStatisticsBarChartTab)
+            self.countStatisticsBarChart.setGeometry(QRect(-1, -1, 771, 490))
+            self.countStatisticsBarChart.setObjectName(
+                "countStatisticsBarChart")
+        self.countStatisticsBarChart.load(
+            QUrl("file:///" + QFileInfo("charts/countStatisticsBarChart.html").absoluteFilePath()))
+
+    def renderCountStatisticsPieChart(self, limit):
+        perNumberCount = self.db.getPerNumberCount(limit)[1]
+        countCol = [row[1] for row in perNumberCount]   # 取出第二列，也就是“次数”列
+        counter = {str(i):countCol.count(i) for i in range(0, max(countCol) + 1)}
+
+        pieChart = charts.Pie()
+        pieChart.width = '750px'
+        pieChart.height = '470px'
+        pieChart.add(series_name="", data_pair=list(
+            zip(counter.keys(), counter.values())), rosetype="radius")
+        pieChart.render("charts/countStatisticsPieChart.html")
+
+        if not hasattr(self, "countStatisticsPieChart"):
+            self.countStatisticsPieChart = QWebEngineView(
+                self.countStatisticsPieChartTab)
+            self.countStatisticsPieChart.setGeometry(QRect(-1, -1, 771, 490))
+            self.countStatisticsPieChart.setObjectName(
+                "countStatisticsPieChart")
+        self.countStatisticsPieChart.load(
+            QUrl("file:///" + QFileInfo("charts/countStatisticsPieChart.html").absoluteFilePath()))
+
     def displayOddEvenTable(self):
         tableHeaders = ["奇奇奇", "奇奇偶", "奇偶奇", "偶奇奇", "偶偶奇", "偶奇偶", "奇偶偶", "偶偶偶"]
-        winningNumbers = self.db.getWinningNumbers(-1)
+        winningNumbers = self.db.getWinningNumbers()
         rowCount = len(winningNumbers)
         colCount = len(tableHeaders)
         self.oddEvenTable.setRowCount(rowCount)
@@ -233,7 +330,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
 
     def renderOddEvenBarChart(self, limit):
         winningNumbers = self.db.getWinningNumbers(limit)
-        oddEven = {
+        counter = {
             "奇奇奇": 0, "奇奇偶": 0, "奇偶奇": 0,
             "偶奇奇": 0, "偶偶奇": 0, "偶奇偶": 0,
             "奇偶偶": 0, "偶偶偶": 0
@@ -242,16 +339,16 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             key = ""
             for char in num:
                 key += "偶" if int(char) % 2 == 0 else "奇"
-            oddEven[key] += 1
+            counter[key] += 1
 
         barChart = charts.Bar()
         barChart.width = '750px'
         barChart.height = '470px'
-        barChart.add_xaxis(list(oddEven.keys()))
-        barChart.add_yaxis("奇偶", list(oddEven.values()))
+        barChart.add_xaxis(list(counter.keys()))
+        barChart.add_yaxis("奇偶", list(counter.values()))
         barChart.set_global_opts(
             xaxis_opts=options.AxisOpts(name="奇偶"),
-            yaxis_opts=options.AxisOpts(name="数量")
+            yaxis_opts=options.AxisOpts(name="个数")
         )
         barChart.render("charts/oddEvenBarChart.html")
 
@@ -264,7 +361,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
 
     def renderOddEvenPieChart(self, limit):
         winningNumbers = self.db.getWinningNumbers(limit)
-        oddEven = {
+        counter = {
             "奇奇奇": 0, "奇奇偶": 0, "奇偶奇": 0,
             "偶奇奇": 0, "偶偶奇": 0, "偶奇偶": 0,
             "奇偶偶": 0, "偶偶偶": 0
@@ -273,13 +370,13 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             key = ""
             for char in num:
                 key += "偶" if int(char) % 2 == 0 else "奇"
-            oddEven[key] += 1
+            counter[key] += 1
 
         pieChart = charts.Pie()
         pieChart.width = '750px'
         pieChart.height = '470px'
         pieChart.add(series_name="", data_pair=list(
-            zip(oddEven.keys(), oddEven.values())), rosetype="radius")
+            zip(counter.keys(), counter.values())), rosetype="radius")
         pieChart.render("charts/oddEvenPieChart.html")
 
         if not hasattr(self, "oddEvenPieChart"):
@@ -291,7 +388,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
 
     def displayBigSmallTable(self):
         tableHeaders = ["大大大", "大大小", "大小大", "小大大", "大小小", "小大小", "小小大", "小小小"]
-        winningNumbers = self.db.getWinningNumbers(-1)
+        winningNumbers = self.db.getWinningNumbers()
         rowCount = len(winningNumbers)
         colCount = len(tableHeaders)
         self.bigSmallTable.setRowCount(rowCount)
@@ -327,7 +424,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
 
     def renderBigSmallBarChart(self, limit):
         winningNumbers = self.db.getWinningNumbers(limit)
-        bigSmall = {
+        counter = {
             "大大大": 0, "大大小": 0, "大小大": 0,
             "小大大": 0, "大小小": 0, "小大小": 0,
             "小小大": 0, "小小小": 0
@@ -336,16 +433,16 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             key = ""
             for char in num:
                 key += "小" if int(char) <= 4 else "大"
-            bigSmall[key] += 1
+            counter[key] += 1
 
         barChart = charts.Bar()
         barChart.width = '750px'
         barChart.height = '470px'
-        barChart.add_xaxis(list(bigSmall.keys()))
-        barChart.add_yaxis("大小", list(bigSmall.values()))
+        barChart.add_xaxis(list(counter.keys()))
+        barChart.add_yaxis("大小", list(counter.values()))
         barChart.set_global_opts(
             xaxis_opts=options.AxisOpts(name="大小"),
-            yaxis_opts=options.AxisOpts(name="数量")
+            yaxis_opts=options.AxisOpts(name="个数")
         )
         barChart.render("charts/bigSmallBarChart.html")
 
@@ -358,7 +455,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
 
     def renderBigSmallPieChart(self, limit):
         winningNumbers = self.db.getWinningNumbers(limit)
-        bigSmall = {
+        counter = {
             "大大大": 0, "大大小": 0, "大小大": 0,
             "小大大": 0, "大小小": 0, "小大小": 0,
             "小小大": 0, "小小小": 0
@@ -367,13 +464,13 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             key = ""
             for char in num:
                 key += "小" if int(char) <= 4 else "大"
-            bigSmall[key] += 1
+            counter[key] += 1
 
         pieChart = charts.Pie()
         pieChart.width = '750px'
         pieChart.height = '470px'
         pieChart.add(series_name="", data_pair=list(
-            zip(bigSmall.keys(), bigSmall.values())), rosetype="radius")
+            zip(counter.keys(), counter.values())), rosetype="radius")
         pieChart.render("charts/bigSmallPieChart.html")
 
         if not hasattr(self, "bigSmallPieChart"):
@@ -385,7 +482,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
 
     def displayYinYangTable(self):
         tableHeaders = ["阴阴阴", "阴阴阳", "阴阳阴", "阳阴阴", "阴阳阳", "阳阴阳", "阳阳阴", "阳阳阳"]
-        winningNumbers = self.db.getWinningNumbers(-1)
+        winningNumbers = self.db.getWinningNumbers()
         rowCount = len(winningNumbers)
         colCount = len(tableHeaders)
         self.yinYangTable.setRowCount(rowCount)
@@ -421,7 +518,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
 
     def renderYinYangBarChart(self, limit):
         winningNumbers = self.db.getWinningNumbers(limit)
-        yinYang = {
+        counter = {
             "阴阴阴": 0, "阴阴阳": 0, "阴阳阴": 0,
             "阳阴阴": 0, "阴阳阳": 0, "阳阴阳": 0,
             "阳阳阴": 0, "阳阳阳": 0
@@ -430,16 +527,16 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             key = ""
             for char in num:
                 key += "阳" if int(char) in [1, 2, 5, 8, 9] else "阴"
-            yinYang[key] += 1
+            counter[key] += 1
 
         barChart = charts.Bar()
         barChart.width = '750px'
         barChart.height = '470px'
-        barChart.add_xaxis(list(yinYang.keys()))
-        barChart.add_yaxis("阴阳", list(yinYang.values()))
+        barChart.add_xaxis(list(counter.keys()))
+        barChart.add_yaxis("阴阳", list(counter.values()))
         barChart.set_global_opts(
             xaxis_opts=options.AxisOpts(name="阴阳"),
-            yaxis_opts=options.AxisOpts(name="数量")
+            yaxis_opts=options.AxisOpts(name="个数")
         )
         barChart.render("charts/yinYangBarChart.html")
 
@@ -452,7 +549,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
 
     def renderYinYangPieChart(self, limit):
         winningNumbers = self.db.getWinningNumbers(limit)
-        yinYang = {
+        counter = {
             "阴阴阴": 0, "阴阴阳": 0, "阴阳阴": 0,
             "阳阴阴": 0, "阴阳阳": 0, "阳阴阳": 0,
             "阳阳阴": 0, "阳阳阳": 0
@@ -461,13 +558,13 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             key = ""
             for char in num:
                 key += "阳" if int(char) in [1, 2, 5, 8, 9] else "阴"
-            yinYang[key] += 1
+            counter[key] += 1
 
         pieChart = charts.Pie()
         pieChart.width = '750px'
         pieChart.height = '470px'
         pieChart.add(series_name="", data_pair=list(
-            zip(yinYang.keys(), yinYang.values())), rosetype="radius")
+            zip(counter.keys(), counter.values())), rosetype="radius")
         pieChart.render("charts/yinYangPieChart.html")
 
         if not hasattr(self, "yinYangPieChart"):
@@ -479,7 +576,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
 
     def displayPrimeCompositeTable(self):
         tableHeaders = ["质质质", "质质合", "质合质", "合质质", "质合合", "合质合", "合合质", "合合合"]
-        winningNumbers = self.db.getWinningNumbers(-1)
+        winningNumbers = self.db.getWinningNumbers()
         rowCount = len(winningNumbers)
         colCount = len(tableHeaders)
         self.primeCompositeTable.setRowCount(rowCount)
@@ -516,7 +613,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
 
     def renderPrimeCompositeBarChart(self, limit):
         winningNumbers = self.db.getWinningNumbers(limit)
-        primeComposite = {
+        counter = {
             "质质质": 0, "质质合": 0, "质合质": 0,
             "合质质": 0, "质合合": 0, "合质合": 0,
             "合合质": 0, "合合合": 0
@@ -525,16 +622,16 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             key = ""
             for char in num:
                 key += "质" if tools.isPrimeNumber(int(char)) else "合"
-            primeComposite[key] += 1
+            counter[key] += 1
 
         barChart = charts.Bar()
         barChart.width = '750px'
         barChart.height = '470px'
-        barChart.add_xaxis(list(primeComposite.keys()))
-        barChart.add_yaxis("质合", list(primeComposite.values()))
+        barChart.add_xaxis(list(counter.keys()))
+        barChart.add_yaxis("质合", list(counter.values()))
         barChart.set_global_opts(
             xaxis_opts=options.AxisOpts(name="质合"),
-            yaxis_opts=options.AxisOpts(name="数量")
+            yaxis_opts=options.AxisOpts(name="个数")
         )
         barChart.render("charts/primeCompositeBarChart.html")
 
@@ -549,7 +646,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
 
     def renderPrimeCompositePieChart(self, limit):
         winningNumbers = self.db.getWinningNumbers(limit)
-        primeComposite = {
+        counter = {
             "质质质": 0, "质质合": 0, "质合质": 0,
             "合质质": 0, "质合合": 0, "合质合": 0,
             "合合质": 0, "合合合": 0
@@ -558,13 +655,13 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             key = ""
             for char in num:
                 key += "质" if tools.isPrimeNumber(int(char)) else "合"
-            primeComposite[key] += 1
+            counter[key] += 1
 
         pieChart = charts.Pie()
         pieChart.width = '750px'
         pieChart.height = '470px'
         pieChart.add(series_name="", data_pair=list(
-            zip(primeComposite.keys(), primeComposite.values())), rosetype="radius")
+            zip(counter.keys(), counter.values())), rosetype="radius")
         pieChart.render("charts/primeCompositePieChart.html")
 
         if not hasattr(self, "primeCompositePieChart"):
@@ -577,7 +674,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
 
     def displayCalcSumTable(self):
         tableHeaders = [str(i) for i in range(28)]
-        winningNumbers = self.db.getWinningNumbers(-1)
+        winningNumbers = self.db.getWinningNumbers()
         rowCount = len(winningNumbers)
         colCount = len(tableHeaders)
         self.calcSumTable.setRowCount(rowCount)
@@ -610,19 +707,19 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
 
     def renderCalcSumBarChart(self, limit):
         winningNumbers = self.db.getWinningNumbers(limit)
-        calcSum = {str(i): 0 for i in range(28)}
+        counter = {str(i): 0 for i in range(28)}
         for num in winningNumbers:
             numSum = sum([int(i) for i in list(num)])
-            calcSum[str(numSum)] += 1
+            counter[str(numSum)] += 1
 
         barChart = charts.Bar()
         barChart.width = '750px'
         barChart.height = '470px'
-        barChart.add_xaxis(list(calcSum.keys()))
-        barChart.add_yaxis("和值", list(calcSum.values()))
+        barChart.add_xaxis(list(counter.keys()))
+        barChart.add_yaxis("和值", list(counter.values()))
         barChart.set_global_opts(
             xaxis_opts=options.AxisOpts(name="和值"),
-            yaxis_opts=options.AxisOpts(name="数量")
+            yaxis_opts=options.AxisOpts(name="个数")
         )
         barChart.render("charts/calcSumBarChart.html")
 
@@ -635,16 +732,16 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
 
     def renderCalcSumPieChart(self, limit):
         winningNumbers = self.db.getWinningNumbers(limit)
-        calcSum = {str(i): 0 for i in range(28)}
+        counter = {str(i): 0 for i in range(28)}
         for num in winningNumbers:
             numSum = sum([int(i) for i in list(num)])
-            calcSum[str(numSum)] += 1
+            counter[str(numSum)] += 1
 
         pieChart = charts.Pie()
         pieChart.width = '750px'
         pieChart.height = '470px'
         pieChart.add(series_name="", data_pair=list(
-            zip(calcSum.keys(), calcSum.values())), rosetype="radius")
+            zip(counter.keys(), counter.values())), rosetype="radius")
         pieChart.render("charts/calcSumPieChart.html")
 
         if not hasattr(self, "calcSumPieChart"):
@@ -660,7 +757,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
             for j in range(3):
                 for k in range(3):
                     tableHeaders.append(str(i) + str(j) + str(k))
-        winningNumbers = self.db.getWinningNumbers(-1)
+        winningNumbers = self.db.getWinningNumbers()
         rowCount = len(winningNumbers)
         colCount = len(tableHeaders)
         self.calc012Table.setRowCount(rowCount)
@@ -696,25 +793,25 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
 
     def renderCalc012BarChart(self, limit):
         winningNumbers = self.db.getWinningNumbers(limit)
-        calc012 = {}
+        counter = {}
         for i in range(3):
             for j in range(3):
                 for k in range(3):
-                    calc012[str(i) + str(j) + str(k)] = 0
+                    counter[str(i) + str(j) + str(k)] = 0
         for num in winningNumbers:
             key = ""
             for char in num:
                 key += str(int(char) % 3)
-            calc012[key] += 1
+            counter[key] += 1
 
         barChart = charts.Bar()
         barChart.width = '750px'
         barChart.height = '470px'
-        barChart.add_xaxis(list(calc012.keys()))
-        barChart.add_yaxis("012路", list(calc012.values()))
+        barChart.add_xaxis(list(counter.keys()))
+        barChart.add_yaxis("012路", list(counter.values()))
         barChart.set_global_opts(
             xaxis_opts=options.AxisOpts(name="012路"),
-            yaxis_opts=options.AxisOpts(name="数量")
+            yaxis_opts=options.AxisOpts(name="个数")
         )
         barChart.render("charts/calc012BarChart.html")
 
@@ -727,22 +824,22 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
 
     def renderCalc012PieChart(self, limit):
         winningNumbers = self.db.getWinningNumbers(limit)
-        calc012 = {}
+        counter = {}
         for i in range(3):
             for j in range(3):
                 for k in range(3):
-                    calc012[str(i) + str(j) + str(k)] = 0
+                    counter[str(i) + str(j) + str(k)] = 0
         for num in winningNumbers:
             key = ""
             for char in num:
                 key += str(int(char) % 3)
-            calc012[key] += 1
+            counter[key] += 1
 
         pieChart = charts.Pie()
         pieChart.width = '750px'
         pieChart.height = '470px'
         pieChart.add(series_name="", data_pair=list(
-            zip(calc012.keys(), calc012.values())), rosetype="radius")
+            zip(counter.keys(), counter.values())), rosetype="radius")
         pieChart.render("charts/calc012PieChart.html")
 
         if not hasattr(self, "calc012PieChart"):
@@ -754,7 +851,7 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
 
     def displayCalcSpanTable(self):
         tableHeaders = [str(i) for i in range(10)]
-        winningNumbers = self.db.getWinningNumbers(-1)
+        winningNumbers = self.db.getWinningNumbers()
         rowCount = len(winningNumbers)
         colCount = len(tableHeaders)
         self.calcSpanTable.setRowCount(rowCount)
@@ -788,20 +885,20 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
 
     def renderCalcSpanBarChart(self, limit):
         winningNumbers = self.db.getWinningNumbers(limit)
-        calcSpan = {str(i): 0 for i in range(10)}
+        counter = {str(i): 0 for i in range(10)}
         for num in winningNumbers:
             separatedNumbers = [int(i) for i in list(num)]
             span = max(separatedNumbers) - min(separatedNumbers)
-            calcSpan[str(span)] += 1
+            counter[str(span)] += 1
 
         barChart = charts.Bar()
         barChart.width = '750px'
         barChart.height = '470px'
-        barChart.add_xaxis(list(calcSpan.keys()))
-        barChart.add_yaxis("跨度", list(calcSpan.values()))
+        barChart.add_xaxis(list(counter.keys()))
+        barChart.add_yaxis("跨度", list(counter.values()))
         barChart.set_global_opts(
             xaxis_opts=options.AxisOpts(name="跨度"),
-            yaxis_opts=options.AxisOpts(name="数量")
+            yaxis_opts=options.AxisOpts(name="个数")
         )
         barChart.render("charts/calcSpanBarChart.html")
 
@@ -814,17 +911,17 @@ class MyMainWindow(QMainWindow, mainWindow.Ui_MainWindow):
 
     def renderCalcSpanPieChart(self, limit):
         winningNumbers = self.db.getWinningNumbers(limit)
-        calcSpan = {str(i): 0 for i in range(10)}
+        counter = {str(i): 0 for i in range(10)}
         for num in winningNumbers:
             separatedNumbers = [int(i) for i in list(num)]
             span = max(separatedNumbers) - min(separatedNumbers)
-            calcSpan[str(span)] += 1
+            counter[str(span)] += 1
 
         pieChart = charts.Pie()
         pieChart.width = '750px'
         pieChart.height = '470px'
         pieChart.add(series_name="", data_pair=list(
-            zip(calcSpan.keys(), calcSpan.values())), rosetype="radius")
+            zip(counter.keys(), counter.values())), rosetype="radius")
         pieChart.render("charts/calcSpanPieChart.html")
 
         if not hasattr(self, "calcSpanPieChart"):
