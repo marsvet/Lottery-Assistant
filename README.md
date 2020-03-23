@@ -31,7 +31,8 @@ A tool for lottery.
    $ cd ../backend
    $ pipenv install
    $ pipenv shell
-   $ gunicorn -b 0.0.0.0:3001 main:app
+   $ pipenv install gunicorn
+   $ ~/.local/share/virtualenvs/backend-xxx/bin/gunicorn -b 0.0.0.0:3001 main:app
    ```
 
 5. 配置 nginx 服务器，添加以下内容：
@@ -46,7 +47,7 @@ A tool for lottery.
    
    	location /  {
    		root /var/www/Lottery-Assistant/frontend/dist;
-   		try_files $url $url/ /index.html;
+   		try_files $uri $uri/ /index.html;
    	}
    
    	location /raw  {
