@@ -37,25 +37,12 @@
     <v-row>
       <v-col cols="12">
         <v-card>
-          <v-data-table
+          <data-table
             :headers="vuetifyTableData.headers"
             :items="vuetifyTableData.items"
-            :items-per-page="10"
-            :search="search"
-            :loading="loading"
-            :dense="denseTable"
-            class="table-with-border"
-          >
-            <template v-slot:top>
-              <v-btn
-                class="mt-4 mb-4 ml-3 ml-sm-10"
-                outlined
-                rounded
-                color="primary"
-                @click="denseTable = !denseTable"
-              >{{ btnText }}</v-btn>
-            </template>
-          </v-data-table>
+            :loading="tableLoading"
+            :withBorder="true"
+          ></data-table>
         </v-card>
       </v-col>
     </v-row>
@@ -65,17 +52,17 @@
 <script>
 import BarChart from "../components/BarChart";
 import PieChart from "../components/PieChart";
+import DataTable from "../components/DataTable";
 
 export default {
   components: {
     BarChart,
-    PieChart
+    PieChart,
+    DataTable
   },
   data() {
     return {
-      search: "",
-      loading: true,
-      denseTable: false,
+      tableLoading: true,
       lastest: -1, // 只显示最近 lastest 期。
       vuetifyTableData: {
         headers: [],
@@ -99,9 +86,6 @@ export default {
     },
     winningNumberList() {
       return this.$store.state.winningNumberList;
-    },
-    btnText() {
-      return this.denseTable == true ? "关闭密集模式" : "开启密集模式";
     }
   },
   watch: {
@@ -119,7 +103,7 @@ export default {
   },
   methods: {
     setData() {
-      this.loading = false;
+      this.tableLoading = false;
       this.lastestChanged();
     },
     lastestChanged() {

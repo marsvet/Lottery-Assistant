@@ -16,7 +16,7 @@
       <v-col v-if="$vuetify.breakpoint.smAndUp" sm="1" md="2"></v-col>
       <v-col cols="7">
         <v-text-field
-          v-model="search"
+          v-model="searchTable"
           append-icon="mdi-magnify"
           label="输入关键词搜索..."
           single-line
@@ -27,25 +27,13 @@
     <v-row>
       <v-col cols="12">
         <v-card>
-          <v-data-table
+          <data-table
             :headers="vuetifyTableData.headers"
             :items="vuetifyTableData.items"
-            :items-per-page="10"
-            :search="search"
-            :loading="loading"
-            :dense="denseTable"
-            class="table-with-default-border"
-          >
-            <template v-slot:top>
-              <v-btn
-                class="mt-4 mb-4 ml-3 ml-sm-10"
-                outlined
-                rounded
-                color="primary"
-                @click="denseTable = !denseTable"
-              >{{ btnText }}</v-btn>
-            </template>
-          </v-data-table>
+            :loading="tableLoading"
+            :withBorder="false"
+            :search="searchTable"
+          ></data-table>
         </v-card>
       </v-col>
     </v-row>
@@ -53,12 +41,16 @@
 </template>
 
 <script>
+import DataTable from "../components/DataTable";
+
 export default {
+  components: {
+    DataTable
+  },
   data() {
     return {
-      search: "",
-      loading: true,
-      denseTable: false,
+      searchTable: "",
+      tableLoading: true,
       lastest: -1, // 只显示最近 lastest 期。
       vuetifyTableData: {
         headers: [
@@ -83,9 +75,6 @@ export default {
     },
     winningNumberList() {
       return this.$store.state.winningNumberList;
-    },
-    btnText() {
-      return this.denseTable == true ? "关闭密集模式" : "开启密集模式";
     }
   },
   watch: {
@@ -103,7 +92,7 @@ export default {
   },
   methods: {
     setData() {
-      this.loading = false;
+      this.tableLoading = false;
       this.lastestChanged();
     },
     lastestChanged() {
