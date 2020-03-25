@@ -92,8 +92,7 @@ export default {
     allData: {
       handler() {
         this.setData();
-      },
-      deep: true // watch 默认无法监听对象内部的变化，将 deep 设为 true 就可以监听了
+      }
       // immediate: true  // 将该属性设为 true，组件在被创建时会自动执行 handler 一次。
       // 但由于 this.allData 的数据量很大，使用该属性会导致页面卡顿，所以改为在 created 函数中实现此功能
     }
