@@ -41,23 +41,23 @@ A tool for lottery.
    server {
    	listen 3000;
    	server_name localhost;
-   
+
    	access_log  /var/log/nginx/access.log;
    	error_log  /var/log/nginx/error.log;
-   
+
    	location /  {
    		root /var/www/Lottery-Assistant/frontend/dist;
    		try_files $uri $uri/ /index.html;
    	}
-   
+
    	location /raw  {
    		alias /var/www/Lottery-Assistant/backend/raw;
    	}
-   
+
    	location /api {
    		proxy_pass         http://localhost:3001/;
    		proxy_redirect     off;
-   
+
    		proxy_set_header   Host             $http_host;
    		proxy_set_header   X-Real-IP        $remote_addr;
    		proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
@@ -67,6 +67,7 @@ A tool for lottery.
 
 ## TODO
 
-- [ ] 表格中有数据的单元格设置背景颜色（黄色）。
 - [ ] “回到顶部” 按钮。
 - [ ] 表格导出为 EXCEL 的功能。
+- [ ] 固定表格头
+- [ ] 表格头适配手机的问题。具体情况参见 components/DataTable 组件中的注释

@@ -34,7 +34,7 @@ export default {
 
 .table-with-border td,
 .table-with-border th {
-  border-left: 1px solid #dfdcdc;
+  border-left: thin solid rgba(0, 0, 0, 0.12);
 }
 
 .table-with-border td:first-child,
@@ -44,6 +44,6 @@ export default {
 
 .table-with-border th,
 .table-with-default-border th {
-  border-top: 1px solid #dfdcdc;
+  border-top: thin solid rgba(0, 0, 0, 0.12);
 }
 </style>
