@@ -16,7 +16,7 @@ class Config:
             'id': 'updateDB',
             'func': 'app.tasks:updateDB',
             'trigger': 'cron',
-            'hour': '21',
-            'minute': '30'
+            'hour': '8',
+            # 'minute': '30'
         }
     ]
