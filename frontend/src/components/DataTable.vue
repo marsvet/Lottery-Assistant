@@ -6,12 +6,12 @@
     :dense="denseTable"
     :search="search"
     :items-per-page="20"
+    :class="{ 'table-with-border': withBorder, 'table-with-default-border': !withBorder }"
     :footer-props="{
       'items-per-page-options': [10, 20, 30, 40, 50, -1],
       'show-current-page': true,
       'show-first-last-page': true
     }"
-    :class="{'table-with-border': withBorder, 'table-with-default-border': !withBorder }"
   >
     <template v-slot:top>
       <v-btn
@@ -22,6 +22,20 @@
         color="primary"
         @click="denseTable = !denseTable"
       >{{ btnText }}</v-btn>
+    </template>
+    <template v-slot:item="line">
+      <tr>
+        <td
+          v-for="(header, index) in line.headers"
+          :key="index"
+          :class="{
+            'text-start': header.align == 'start',
+            'text-center': header.align == 'center',
+            'text-end': header.align == 'end',
+            'tdHighlight': tdHighlight && line.item[header.value]
+          }"
+        >{{ line.item[header.value] }}</td>
+      </tr>
     </template>
   </v-data-table>
 </template>
@@ -36,7 +50,11 @@ export default {
     search: {
       type: String,
       default: ""
-    }
+    },
+    tdHighlight: {
+      type: Boolean,
+      default: false
+    } // 当该 prop 为 true 并且 td 内容不为空时，td 被高亮
   },
   data() {
     return {
@@ -50,3 +68,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.tdHighlight {
+  background-color: yellow;
+}
+</style>

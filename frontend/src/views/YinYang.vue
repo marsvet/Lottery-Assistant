@@ -42,6 +42,7 @@
             :items="vuetifyTableData.items"
             :loading="tableLoading"
             :withBorder="true"
+            tdHighlight
           ></data-table>
         </v-card>
       </v-col>
