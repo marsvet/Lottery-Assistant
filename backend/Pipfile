@@ -1,6 +1,6 @@
 [[source]]
 name = "pypi"
-url = "https://pypi.douban.com/simple"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
 verify_ssl = true
 
 [dev-packages]
@@ -12,6 +12,7 @@ flask = "*"
 openpyxl = "*"
 flask-apscheduler = "*"
 requests = "*"
+gunicorn = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.8"
