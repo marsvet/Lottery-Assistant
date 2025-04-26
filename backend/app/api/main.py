@@ -13,15 +13,3 @@ def getWinningData():
         'data': [list(item) for item in winning_data]
     }
     return jsonify(result)
-
-
-# @api.route('/export_to_excel', methods=['POST'])
-# def export2Excel():
-#     filename = request.json['filename']
-#     data = request.json['data']
-#     filepath = './raw/%s.xlsx' % (filename)
-#     excel.export2Excel(data, filepath)
-#     return jsonify({
-#         'success': True,
-#         'url': filepath[1:]
-#     })
